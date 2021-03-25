@@ -63,12 +63,6 @@ export default class WhoSaidWhat extends Plugin {
 
     setup();
 
-    // style = document.createElement("style");
-    // style.textContent = `.vz-deleted-message {
-    //   background-color: rgba(240, 71, 71, 0.1) !important;
-    // }`;
-    // document.head.append(style);
-
     this.injectStyles("./styles.css");
   }
 
