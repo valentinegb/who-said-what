@@ -1,0 +1,8 @@
+/* Themes can redefine the below variable if their developers would like to */
+:root {
+  --vz-deleted-message-color: #f047471a;
+}
+
+.vz-deleted-message {
+  background-color: var(--vz-deleted-message-color) !important;
+}

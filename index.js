@@ -63,11 +63,13 @@ export default class WhoSaidWhat extends Plugin {
 
     setup();
 
-    style = document.createElement("style");
-    style.textContent = `.vz-deleted-message {
-      background-color: rgba(240, 71, 71, 0.1) !important;
-    }`;
-    document.head.append(style);
+    // style = document.createElement("style");
+    // style.textContent = `.vz-deleted-message {
+    //   background-color: rgba(240, 71, 71, 0.1) !important;
+    // }`;
+    // document.head.append(style);
+
+    this.injectStyles("./styles.css");
   }
 
   stop() {
@@ -76,10 +78,6 @@ export default class WhoSaidWhat extends Plugin {
     for (let e of document.getElementsByClassName("vz-deleted-message")) {
       e.remove();
     }
-
-    try {
-      style.remove();
-    } catch {}
 
     mod._orderedActionHandlers.MESSAGE_DELETE[index] = original;
   }
