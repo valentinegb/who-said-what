@@ -54,7 +54,7 @@ export default class WhoSaidWhat extends Plugin {
 					if (
 						document
 							.getElementById(`chat-messages-${obj.id}`)
-							.className.includes("ephemeral")
+							?.className.includes("ephemeral")
 					)
 						return originalActionHandler(obj);
 
@@ -69,7 +69,7 @@ export default class WhoSaidWhat extends Plugin {
 					if (
 						document
 							.getElementById(`chat-messages-${obj.id}`)
-							.className.includes("ephemeral")
+							?.className.includes("ephemeral")
 					)
 						return originalstoreDidChange(obj);
 				},

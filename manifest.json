@@ -1,7 +1,7 @@
 {
 	"name": "Who Said What?",
 	"description": "Prevents Discord from removing deleted messages for moments when you say \"Who said what?\"",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"license": "MIT",
 	"author": {
 		"name": "Vbriese",
