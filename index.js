@@ -10,69 +10,86 @@ let original;
 let style;
 
 export default class WhoSaidWhat extends Plugin {
-  start() {
-    let deleted = [];
+	start() {
+		let deleted = [];
 
-    const styleMessage = async ({ id }) => {
-      let el = document.getElementById(`chat-messages-${id}`);
-      if (!el) return;
+		const styleMessage = async ({ id }) => {
+			let el = document.getElementById(`chat-messages-${id}`);
+			if (!el) return;
 
-      if (el.classList.contains("vz-deleted-message")) return;
+			if (el.classList.contains("vz-deleted-message")) return;
 
-      el.classList.add("vz-deleted-message");
-    };
+			el.classList.add("vz-deleted-message");
+		};
 
-    const run = () => {
-      for (let obj of deleted) {
-        styleMessage(obj);
-      }
-    };
+		const run = () => {
+			for (let obj of deleted) {
+				styleMessage(obj);
+			}
+		};
 
-    const getWantedHandler = (mod) =>
-      mod._orderedActionHandlers.MESSAGE_DELETE.find((x) =>
-        x.actionHandler.toString().includes("revealedMessageId")
-      );
+		const getWantedHandler = (mod) =>
+			mod._orderedActionHandlers.MESSAGE_DELETE.find((x) =>
+				x.actionHandler.toString().includes("revealedMessageId")
+			);
 
-    const setup = () => {
-      try {
-        original = getWantedHandler(mod);
-      } catch (e) {
-        return setTimeout(setup, 3000);
-      }
+		const setup = () => {
+			try {
+				original = getWantedHandler(mod);
+			} catch (e) {
+				return setTimeout(setup, 3000);
+			}
 
-      index = mod._orderedActionHandlers.MESSAGE_DELETE.indexOf(
-        getWantedHandler(mod)
-      );
+			index = mod._orderedActionHandlers.MESSAGE_DELETE.indexOf(
+				getWantedHandler(mod)
+			);
 
-      mod._orderedActionHandlers.MESSAGE_DELETE[index] = {
-        actionHandler: (obj) => {
-          if (deleted.find((x) => x.id === obj.id)) {
-            return;
-          }
+			const originalActionHandler =
+				mod._orderedActionHandlers.MESSAGE_DELETE[index].actionHandler;
+			const originalstoreDidChange =
+				mod._orderedActionHandlers.MESSAGE_DELETE[index].storeDidChange;
 
-          deleted.push(obj);
+			mod._orderedActionHandlers.MESSAGE_DELETE[index] = {
+				actionHandler: (obj) => {
+					if (
+						document
+							.getElementById(`chat-messages-${obj.id}`)
+							.className.includes("ephemeral")
+					)
+						return originalActionHandler(obj);
 
-          styleMessage(obj);
-        },
+					if (deleted.find((x) => x.id === obj.id)) return;
 
-        storeDidChange: function () {},
-      };
-    };
+					deleted.push(obj);
 
-    interval = setInterval(run, 300);
+					styleMessage(obj);
+				},
 
-    setup();
+				storeDidChange: (obj) => {
+					if (
+						document
+							.getElementById(`chat-messages-${obj.id}`)
+							.className.includes("ephemeral")
+					)
+						return originalstoreDidChange(obj);
+				},
+			};
+		};
 
-    this.injectStyles("./styles.css");
-  }
+		interval = setInterval(run, 300);
 
-  stop() {
-    clearInterval(interval);
+		setup();
 
-    for (let e of document.getElementsByClassName("vz-deleted-message")) {
-      e.remove();
-    }
+		this.injectStyles("./styles.css");
+	}
 
-    mod._orderedActionHandlers.MESSAGE_DELETE[index] = original;
-  }
+	stop() {
+		clearInterval(interval);
+
+		for (let e of document.getElementsByClassName("vz-deleted-message")) {
+			e.remove();
+		}
+
+		mod._orderedActionHandlers.MESSAGE_DELETE[index] = original;
+	}
 }

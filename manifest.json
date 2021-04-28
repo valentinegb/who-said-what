@@ -1,10 +1,10 @@
 {
-  "name": "Who Said What?",
-  "description": "Prevents Discord from removing deleted messages for moments when you say \"Who said what?\"",
-  "version": "1.1.0",
-  "license": "MIT",
-  "author": {
-    "name": "Vbriese",
-    "id": "441384103946878987"
-  }
+	"name": "Who Said What?",
+	"description": "Prevents Discord from removing deleted messages for moments when you say \"Who said what?\"",
+	"version": "1.2.0",
+	"license": "MIT",
+	"author": {
+		"name": "Vbriese",
+		"id": "441384103946878987"
+	}
 }
